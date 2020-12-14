@@ -40,17 +40,20 @@ def createDir(savePath):
         os.makedirs(path)
         
 def moveTest(num, testNum, savePath, datasetpath):
-    
+
     testDir = os.listdir('%s%s' % (datasetpath, '/img'))[(num - testNum):num]
     testDir.sort()
-    
+
     imgPaths = os.listdir('%s%s' % (savePath, '/train/patch'))
     imgPaths.sort()
-    
+
     for fs in imgPaths:
-        
-        testIndex = '%s%s' % (fs[0:5], '.png')
-        
+
+        hello = fs.split('_')       
+        testIndex = '%s%s' % (hello[0]+'_'+hello[1], '.png')
+
+        # testIndex = '%s%s' % (fs[0:5], '.png')
+
         if testIndex in testDir:
 
             name = fs.split('.')[0]

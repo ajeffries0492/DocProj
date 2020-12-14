@@ -5,6 +5,7 @@ import numpy as np
 import skimage
 from skimage import io
 from skimage import transform as tf
+from skimage import img_as_ubyte
 import argparse
 
 import torch
@@ -17,10 +18,11 @@ from modelGeoNet import GeoNet
 
 # For parsing commandline arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--imgPath", type=str, default='E:\\IMG_7325.jpeg', help='input image path')
-parser.add_argument("--modelPath", type=str, default='E:\\model.pkl', help='pre-trained model path')
-parser.add_argument("--saveImgPath", type=str, default='E:\\IMG_7325.png', help='resized image path')
-parser.add_argument("--saveFlowPath", type=str, default='E:\\IMG_7325.npy', help='saved flows path')
+
+parser.add_argument("--imgPath", type=str, default='./IMG_1164.jpg', help='input image path')
+parser.add_argument("--modelPath", type=str, default='./model_GeoNet.pkl', help='pre-trained model path')
+parser.add_argument("--saveImgPath", type=str, default='./IMG_1164_resized.png', help='resized image path')
+parser.add_argument("--saveFlowPath", type=str, default='./IMG_1164.npy', help='saved flows path')
 args = parser.parse_args()
 
 def resizeImg(imgPath, H, W):
@@ -143,7 +145,9 @@ def testRealFlow(modelPath, localPatch, globalPatch):
         for k, v in state_dict.items():
             name = k[7:]
             new_state_dict[name] = v
-        model.load_state_dict(new_state_dict)  
+        model.load_state_dict(new_state_dict) 
+
+     
         
     model.eval()
     
@@ -184,6 +188,7 @@ def testRealFlow(modelPath, localPatch, globalPatch):
 
 
 img = resizeImg(args.imgPath, H = 2000, W = 1500)
+#io.imsave(args.saveImgPath, img_as_ubyte(img))
 io.imsave(args.saveImgPath, img)
 img = padImg(img)
 totalLocalPatch, totalGlobaPatch = cropToPatch(img)

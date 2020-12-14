@@ -3,10 +3,14 @@ import skimage.io as io
 from numba import cuda
 import math
 import argparse
+import os
 
 parser = argparse.ArgumentParser(description='resamping')
-parser.add_argument("--img_path", type=str, default= '/home/xliea/GeoProj/img.png')
-parser.add_argument("--flow_path", type=str, default= '/home/xliea/GeoProj/flow.npy')
+parser.add_argument("--img_path", type=str, default= './IMG_1164_resized.png')
+parser.add_argument("--flow_path", type=str, default= './IMG_1164_new.npy')
+
+os.environ['NUMBAPRO_NVVM'] = r'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\nvvm\bin\nvvm64_33_0.dll'
+os.environ['NUMBAPRO_LIBDEVICE'] = r'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\nvvm\libdevice'
 args = parser.parse_args()
 
 @cuda.jit(device=True)

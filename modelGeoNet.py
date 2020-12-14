@@ -32,8 +32,8 @@ class plainDecoderBlock(nn.Module):
         self.up = None
         
         if stride != 1:
-            self.up = nn.Upsample(scale_factor=2, mode='bilinear')
-            #self.up = nn.Upsample(scale_factor=2, mode='nearest')
+            #self.up = nn.Upsample(scale_factor=2, mode='bilinear',align_corners=True)
+            self.up = nn.Upsample(scale_factor=2, mode='nearest')
         
     def forward(self, x):
         x = F.relu(self.bn1(self.conv1(x)))
@@ -90,14 +90,14 @@ class resDecoderBlock(nn.Module):
         else:
             self.conv2 = nn.Conv2d(inChannel, outChannel, kernel_size=3, stride=1, padding=1)
             self.bn2 = nn.BatchNorm2d(outChannel)
-            self.up = nn.Upsample(scale_factor=2, mode='bilinear')
-            #self.up = nn.Upsample(scale_factor=2, mode='nearest')
+            #self.up = nn.Upsample(scale_factor=2, mode='bilinear',align_corners=True)
+            self.up = nn.Upsample(scale_factor=2, mode='nearest')
             
             self.downsample = nn.Sequential(
                 nn.Conv2d(inChannel, outChannel, kernel_size=1, stride=1),
                 nn.BatchNorm2d(outChannel),
-                nn.Upsample(scale_factor=2, mode='bilinear'))
-                #nn.Upsample(scale_factor=2, mode='nearest'))   
+                #nn.Upsample(scale_factor=2, mode='bilinear',align_corners=True))
+                nn.Upsample(scale_factor=2, mode='nearest'))   
         
     def forward(self, x):
         residual = x
@@ -159,7 +159,16 @@ class GeoNet(nn.Module):
         
                        
         # weight initializaion with Kaiming method
+        # modelPath = r'C:\Users\AJEFFR16\Documents\School\EECS 504\Project\DocProj\docProjModels\model_geoNet.pkl'
+        # #state_dict = torch.load(r'C:\Users\AJEFFR16\Documents\School\EECS 504\Project\DocProj\docProjModels\model_geoNet.pkl')
         
+        # if torch.cuda.is_available():
+        #     model = self.cuda()
+
+
+        # if torch.cuda.device_count() > 1:
+        #     model = nn.DataParallel(model)
+        #     model.load_state_dict(torch.load(modelPath))
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels

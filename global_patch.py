@@ -31,17 +31,19 @@ def createDir(savePath, resFactor):
 
         
 def moveTest(num, testNum, savePath, resFactor, datasetpath):
-    
+
     testDir = os.listdir('%s%s' % (datasetpath, '/img'))[(num - testNum):num]
     testDir.sort()
-    
+
     imgPaths = os.listdir('%s%s%s%s' % (savePath, '/train/patch_', resFactor, 'x'))
     imgPaths.sort()
-    
+
     for fs in imgPaths:
-        
-        testIndex = '%s%s' % (fs[0:5], '.png')
-        
+
+        hello = fs.split('_')       
+        testIndex = '%s%s' % (hello[0]+'_'+hello[1], '.png')
+        # testIndex = '%s%s' % (fs[0:5], '.png')
+
         if testIndex in testDir:
 
             name = fs.split('.')[0]
@@ -94,7 +96,8 @@ def generate(S, num, savePath, resFactor, datasetpath):
                 
                 if np.sum(patchmask) == 0:
 
-                    newimg = skimage.transform.resize(globalpatch, (256, 256))
+                    newimg = skimage.transform.resize(globalpatch, (256, 256)) # Change
+
 
                     imgpath =  '%s%s%s%s%s%s%s%s%s' % (savePath, '/train/patch_', resFactor, 'x/', name, '_', 
                                                        str(j).zfill(2), str(i).zfill(2), '.png')

@@ -23,7 +23,7 @@ from model_illNet import illNet
 
 # For parsing commandline arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--imgPath", type=str, default='./example.png')
+parser.add_argument("--imgPath", type=str, default='./result.png')
 parser.add_argument("--savPath", type=str, default='./output.png')
 parser.add_argument("--modelPath", type=str, default='./model_illNet.pkl')
 args = parser.parse_args()
